@@ -1,4 +1,5 @@
 ﻿using System.Security.AccessControl;
+using ConsoleToolKit;
 
 namespace DrawAFrame;
 
@@ -6,6 +7,8 @@ class Program
 {
     static void Main(string[] args)
     {
+        // ToDo: Muss wieder weg.
+        var menu = new Menu();
         var menuTitel = " Menü ";
         string[] menuEintraege = ["0 Anfang", "1 Start", "2 Einstellungen", "3 Informationen", " ", "8 Beenden", "9 Komm Du nur nach Hause", "10 Dachte ich mir doch das Du nicht willst"];
         int frameHoehe;
