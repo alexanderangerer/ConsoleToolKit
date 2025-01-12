@@ -1,12 +1,12 @@
-﻿using System.Security.AccessControl;
-using ConsoleToolKit;
+﻿using ConsoleToolKit;
 
-namespace DrawAFrame;
+namespace Playground;
 
 class Program
 {
     static void Main(string[] args)
     {
-        
+        TicTacToe ttt = new TicTacToe();
+        ttt.SpielStarten();
     }
 }
