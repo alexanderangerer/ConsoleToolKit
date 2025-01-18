@@ -58,73 +58,95 @@ public class TicTacToe
         GewonnenFarbe = ConsoleColor.Magenta;
     }
 
+    /// <summary>
+    /// In dieser Methode startet das Spiel.
+    /// </summary>
     public void SpielStarten()
     {
+        // In diesen Variablen werden alle Infos des aktiven Benutzer gespeichert.
         var spielerNr = 1;
         var aktuellerSpieler = "";
         var aktuellesZeichen = "";
         ConsoleColor aktuelleFarbe = ConsoleColor.Black;
         
+        // Zuerst werden die beiden Spielernamen abgefragt.
         SpielerInitialisieren();
         
+        // Nun wird das Spielfeld angezeigt.
         SpielfeldZeichnen();
 
+        // In dieser Schleife werden die einzelnen Spielzüge abgefragt.
         while (true)
         {
-            if (spielerNr == 1)
+            // Hier wird, je nach aktuellem Spieler, die entsprechenden Infos ermittelt.
+            switch (spielerNr)
             {
-                aktuellerSpieler = Player1;
-                aktuellesZeichen = Player1Zeichen;
-                aktuelleFarbe = Player1Farbe;
+                case 1:
+                    aktuellerSpieler = Player1;
+                    aktuellesZeichen = Player1Zeichen;
+                    aktuelleFarbe = Player1Farbe;
+                    break;
+                case 2:
+                    aktuellerSpieler = Player2;
+                    aktuellesZeichen = Player2Zeichen;
+                    aktuelleFarbe = Player2Farbe;
+                    break;
             }
 
-            if (spielerNr == 2)
-            {
-                aktuellerSpieler = Player2;
-                aktuellesZeichen = Player2Zeichen;
-                aktuelleFarbe = Player2Farbe;
-            }
-
+            // Welcher Spieler an der Reihe ist, wird in der entsprechenden Farbe ausgegeben.
             Console.ForegroundColor = aktuelleFarbe;
             Console.WriteLine($"{aktuellerSpieler} ist mit dem Zeichen {aktuellesZeichen} dran.");
             Console.ResetColor();
             
+            // Nun wird die Eingabe des Spielers eingeholt.
             var eingabe = Console.ReadLine();
 
+            // Zuerst muss geprüft werden, ob die Eingabe überhaupt gültig ist.
+            // Ist dem nicht so, wird die while Schleife direkt wiederholt.
             if (IstEingabeGueltig(eingabe))
             {
+                // Als Nächstes muss geprüft werden, ob das Feld bereits belegt ist.
                 if (!IstFeldBelegt())
                 {
+                    // In der Variable Spielfeld ist das aktuelle Spielfeld gespeichert.
+                    // Die aktuelle Eingabe wird in der Variable (Directory) als vertikaler und horizontaler Wert gespeichert.
+                    // Ist das Feld belegt, wird die while Schleife neu gestartet.
                     Spielfeld[AktuelleKoordinaten["vertikal"], AktuelleKoordinaten["horizontal"]] = aktuellesZeichen;
                 }
                 else
                 {
+                    // Ist das Spielfeld bereits belegt, wird die while-Schleife erneut durchlaufen.
+                    // So wird nochmals nach einer Eingabe gefragt.
                     continue;
                 }
             }
             else
             {
+                // Auch wenn die Eingabe ungültig ist, wird die while-Schleife erneut durchlaufen.
                 continue;
             }
 
+            // Nach dem Aktualisieren des Spielfelds wird dieses neu ausgegeben.
             SpielfeldZeichnen();
-
+            
+            // Nach der Eingabe muss zuerst geprüft werden, ob nun ein Spieler gewonnen hat.
+            if (HatJemandGewonnen(spielerNr))
+            {
+                // Hat ein Spieler gewonnen, wird ein Text mit Linien ausgegeben.
+                GewinnerBekanntgeben(aktuellerSpieler);
+                break;
+            }
+            
+            // Ob das Spielfeld voll ist, darf erst nach der Prüfung, ob jemand gewonnen hat stattfinden.
+            // Hat ein benutzer mit dem letzten möglichen Spielzug gewonnen, würde ansonsten das Volle Feld das Spiel
+            // Beenden.
             if (IstSpielfeldVoll())
             {
                 Console.WriteLine("Unentschieden, Spielfeld ist voll.");
                 break;
             }
 
-            if (HatJemandGewonnen(spielerNr))
-            {
-                Console.ForegroundColor = GewonnenFarbe;
-                Console.WriteLine("------------------");
-                Console.WriteLine($"{aktuellerSpieler} hat gewonnen.");
-                Console.WriteLine("------------------");
-                Console.ResetColor();
-                break;
-            }
-
+            // Hier wird der aktuelle Spieler gewechselt.
             if (spielerNr == 1)
                 spielerNr = 2;
             else
@@ -330,6 +352,33 @@ public class TicTacToe
             Console.WriteLine();
         }
     }
+
+    /// <summary>
+    /// Hier wird der Name des Gewinners hübsch ausgegeben.
+    /// </summary>
+    /// <param name="benutzername">Der Name des Gewinners.</param>
+    private void GewinnerBekanntgeben(string benutzername)
+    {
+        // Hier wird der Text generiert, der ausgegeben werden soll.
+        var Siegertext = benutzername + " hat gewonnen.";
+        var Linie = "";
+
+        // Der Text soll oben wie unten mit Sonderzeichen unterstrichen werden. Damit diese exakt so Lang sind
+        // wie der Text, wird hier ein String aufgebaut, der sich an der Textlänge orientiert.
+        for (int i = 0; i < Siegertext.Length; i++)
+        {
+            Linie += "-";
+        }
+        
+        // Der Gewinnertext wird in einer bestimmten Farbe ausgegeben.
+        Console.ForegroundColor = GewonnenFarbe;
+        // Hier wird nun die Sonderzeichen-Linie über und unter dem Text ausgegeben.
+        Console.WriteLine(Linie);
+        Console.WriteLine(Siegertext);
+        Console.WriteLine(Linie);
+        Console.ResetColor();
+    }
+    
     /// <summary>
     /// Ermittelt die Namen für 2 Spieler. 
     /// </summary>
