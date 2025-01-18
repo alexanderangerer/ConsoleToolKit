@@ -2,7 +2,7 @@ namespace ConsoleToolKit;
 
 public class TicTacToe
 {
-    // ToDo: Die Schriftfarbe der Meldungen ändern sich, sobald in C3 ein Wert gesetzt wurde.
+    // ToDo: Alle öffentlichen Eigenschaften müssen noch über Methoden eingestellt werden können.
     // Public Eigenschaften
     public ConsoleColor FehlerMeldung { get; set; }
     public ConsoleColor Player1Farbe { get; set; }
